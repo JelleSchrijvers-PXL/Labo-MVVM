@@ -1,5 +1,6 @@
 ﻿using MauiIcons.Fluent.Filled;
 using Microsoft.Extensions.Logging;
+using CommunityToolkit.Maui;
 
 namespace Todo.UI
 {
@@ -10,6 +11,7 @@ namespace Todo.UI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseFluentFilledMauiIcons()
                 .ConfigureFonts(fonts =>
                 {

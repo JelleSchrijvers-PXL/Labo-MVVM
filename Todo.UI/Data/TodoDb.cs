@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Todo.UI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,23 +12,23 @@ namespace Todo.UI.Data
     {
         //// Create fake data using Bogus data generator:
         //// https://github.com/bchavez/Bogus
-        //public static Faker<TodoItem> fake = new Faker<TodoItem>()
-        //    .RuleFor(todo => todo.Title, (f, todo) => f.Lorem.Word())
-        //    .RuleFor(todo => todo.Description, (f, todo) => f.Lorem.Sentence())
-        //    .RuleFor(todo => todo.IsCompleted, (f, todo) => f.Random.Bool())
-        //    .RuleFor(todo => todo.DueDate, (f, todo) => f.Date.Soon(7));
+        public static Faker<TodoItem> fake = new Faker<TodoItem>()
+            .RuleFor(todo => todo.Title, (f, todo) => f.Lorem.Word())
+            .RuleFor(todo => todo.Description, (f, todo) => f.Lorem.Sentence())
+            .RuleFor(todo => todo.IsCompleted, (f, todo) => f.Random.Bool())
+            .RuleFor(todo => todo.DueDate, (f, todo) => f.Date.Soon(7));
 
-        //public static List<TodoItem> GetTodoItems(int numberOfItems)
-        //{
-        //    List<TodoItem> items = new List<TodoItem>();
+        public static List<TodoItem> GetTodoItems(int numberOfItems)
+        {
+            List<TodoItem> items = new List<TodoItem>();
 
-        //    for (int i = 0; i < numberOfItems; i++)
-        //    {
-        //        items.Add(fake.Generate());
-        //    }
+            for (int i = 0; i < numberOfItems; i++)
+            {
+                items.Add(fake.Generate());
+            }
 
-        //    return items;
-        //}
+            return items;
+        }
     }
 }
 
