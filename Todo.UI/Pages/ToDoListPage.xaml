@@ -48,23 +48,33 @@
                         MinimumLength="10"/>
                 </Entry.Behaviors>
             </Entry>
-            <Button Grid.Column="1" CornerRadius="45" Padding="0" Text="+" Command="{Binding AddToDoCommand}"/>
+            <Button Grid.Column="1" CornerRadius="45" Padding="0" Text="+" Command="{Binding AddTodoCommand}"/>
         </Grid>
 
         <!-- List of To-Dos -->
         <CollectionView ItemsSource="{Binding TodoItems}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:TodoItem">
-
-                    <Grid ColumnDefinitions="Auto,*">
-                        <CheckBox IsChecked="{Binding IsCompleted}" />
-                        <Label Grid.Column="1" 
-                            Text="{Binding Title}"
-                            TextDecorations="{Binding IsCompleted, Converter={StaticResource CompletedTextDecorationConverter}}"
-                            VerticalOptions="Center"
-                            Margin="10,0,0,0" />
-                    </Grid>
-
+                    <SwipeView>
+                        <SwipeView.LeftItems>
+                            <SwipeItems>
+                                <SwipeItem 
+                                    mi:MauiIcon.Value="{mi:FluentFilled Icon=Delete32Filled, IconSize=Large, IconColor={StaticResource Primary}}" 
+                                    BackgroundColor="LightCoral" 
+                                    Command="{Binding Source={x:Reference TodoListPage}, Path=BindingContext.DeleteTodoCommand}" 
+                                    CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.LeftItems>
+                        
+                        <Grid ColumnDefinitions="Auto,*">
+                            <CheckBox IsChecked="{Binding IsCompleted}" />
+                            <Label  Grid.Column="1" 
+                                    Text="{Binding Title}"
+                                    TextDecorations="{Binding IsCompleted, Converter={StaticResource CompletedTextDecorationConverter}}"
+                                    VerticalOptions="Center"
+                                    Margin="10,0,0,0" />        
+                        </Grid>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

@@ -4,6 +4,8 @@ using System.Text;
 
 namespace Todo.UI.ViewModels
 {
+    using CommunityToolkit.Mvvm.ComponentModel;
+    using CommunityToolkit.Mvvm.Input;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
@@ -11,55 +13,24 @@ namespace Todo.UI.ViewModels
     using Todo.UI.Data;
     using Todo.UI.Models;
 
-    public class TodoListViewModel : INotifyPropertyChanged
+    public partial class TodoListViewModel : ObservableObject
     {
-        public ICommand AddToDoCommand { get; private set; }
-        private string _newTodoTitle;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(AddTodoCommand))]
+        private string _newTodoTitle = "";
+        [ObservableProperty]
         private ObservableCollection<TodoItem> _todoItems;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public string NewTodoTitle
-        {
-            get
-            {
-                return _newTodoTitle;
-            }
-            set
-            {
-                _newTodoTitle = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<TodoItem> TodoItems
-        {
-            get => _todoItems;
-            set
-            {
-                _todoItems = value;
-                OnPropertyChanged();
-            }
-        }
-
         public TodoListViewModel()
         {
             this.TodoItems = new ObservableCollection<TodoItem>();
-
-            //TODO: Initialise commands:
-            AddToDoCommand = new Command(AddTodo);
-            LoadDataCommand = new Command(LoadData);
         }
-
+        private bool CanAddTodo()
+        {
+            return this.NewTodoTitle.Length >= 10;
+        }
+        [RelayCommand(CanExecute = nameof(CanAddTodo))]
         private void AddTodo()
         {
-            //TODO: add item to TodoItems, use NewTodoTitle as Title for the new item
-            //TODO: clear the NewTodoTitle
-
             TodoItem item = new TodoItem
             {
                 Title = this.NewTodoTitle,
@@ -70,21 +41,17 @@ namespace Todo.UI.ViewModels
 
             this.NewTodoTitle = string.Empty;
         }
-
-        public ICommand LoadDataCommand { get; private set; }
-        private void LoadData()
+        [RelayCommand]
+        private async Task LoadData()
         {
+            await Task.Delay(2000);
             TodoItems = new ObservableCollection<TodoItem>(TodoDb.GetTodoItems(15));
-
-            //foreach (TodoItem item in TodoDb.GetTodoItems(15)) 
-            //{
-            //    TodoItems.Add(item);
-            //}
         }
-
+        [RelayCommand]
         private void DeleteTodo(TodoItem item)
         {
             //TODO: remove item from TodoItems
+            this.TodoItems.Remove(item);
         }
     }
 }
