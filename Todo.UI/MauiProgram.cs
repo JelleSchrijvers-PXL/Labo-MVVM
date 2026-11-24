@@ -1,6 +1,10 @@
 ﻿using MauiIcons.Fluent.Filled;
 using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using Todo.UI.ViewModels;
+using Todo.UI.Repositories;
+using Todo.UI.Services;
+using Todo.UI.Pages;
 
 namespace Todo.UI
 {
@@ -19,8 +23,15 @@ namespace Todo.UI
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            #region Services
+            builder.Services.AddSingleton<ITodoRepository, TodoRepository>();
+            builder.Services.AddSingleton<TodoService>();
+            builder.Services.AddTransientWithShellRoute<ToDoListPage,TodoListViewModel>(nameof(ToDoListPage));
+            builder.Services.AddTransientWithShellRoute<ToDoDetailPage,TodoDetailViewModel>(nameof(ToDoDetailPage));
+            #endregion
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

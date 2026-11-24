@@ -12,6 +12,7 @@ namespace Todo.UI.ViewModels
     using System.Windows.Input;
     using Todo.UI.Data;
     using Todo.UI.Models;
+    using Todo.UI.Services;
 
     public partial class TodoListViewModel : ObservableObject
     {
@@ -20,9 +21,11 @@ namespace Todo.UI.ViewModels
         private string _newTodoTitle = "";
         [ObservableProperty]
         private ObservableCollection<TodoItem> _todoItems;
-        public TodoListViewModel()
+        private readonly TodoService _service;
+
+        public TodoListViewModel(TodoService service)
         {
-            this.TodoItems = new ObservableCollection<TodoItem>();
+            _service = service;
         }
         private bool CanAddTodo()
         {
@@ -31,27 +34,21 @@ namespace Todo.UI.ViewModels
         [RelayCommand(CanExecute = nameof(CanAddTodo))]
         private void AddTodo()
         {
-            TodoItem item = new TodoItem
-            {
-                Title = this.NewTodoTitle,
-                IsCompleted = false
-            };
-            
-            this.TodoItems.Add(item);
-
+            TodoItem item = _service.AddTodo(this.NewTodoTitle);
+            TodoItems.Add(item);
             this.NewTodoTitle = string.Empty;
         }
         [RelayCommand]
         private async Task LoadData()
         {
             await Task.Delay(2000);
-            TodoItems = new ObservableCollection<TodoItem>(TodoDb.GetTodoItems(15));
+            TodoItems = new ObservableCollection<TodoItem>(_service.GetAllTodos());
         }
         [RelayCommand]
         private void DeleteTodo(TodoItem item)
         {
-            //TODO: remove item from TodoItems
-            this.TodoItems.Remove(item);
+            _service.RemoveTodo(item);
+            TodoItems.Remove(item);
         }
     }
 }

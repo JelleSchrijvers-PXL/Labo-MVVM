@@ -5,11 +5,11 @@ namespace Todo.UI.Pages
 
 	public partial class ToDoListPage : ContentPage
 	{
-		public ToDoListPage()
+		public ToDoListPage(TodoListViewModel vm)
 		{
 			InitializeComponent();
 
-			this.BindingContext = new TodoListViewModel();
+			this.BindingContext = vm;
 		}
 	}
 }
