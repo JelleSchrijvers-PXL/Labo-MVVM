@@ -18,13 +18,16 @@ namespace Todo.UI.Services
         {
             return _repository.GetAll();
         }
-        public TodoItem AddTodo(string title)
+        public TodoItem SaveTodo(string title, string description, DateTime dueDate)
         {
             TodoItem item = new TodoItem
             {
                 Title = title,
-                IsCompleted = false,
+                Description = description,
+                DueDate = dueDate,
+                IsCompleted = false
             };
+
             _repository.Add(item);
             return item;
         }

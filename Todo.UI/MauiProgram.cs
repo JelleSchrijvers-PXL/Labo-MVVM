@@ -5,6 +5,7 @@ using Todo.UI.ViewModels;
 using Todo.UI.Repositories;
 using Todo.UI.Services;
 using Todo.UI.Pages;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Todo.UI
 {
@@ -28,6 +29,8 @@ namespace Todo.UI
             builder.Services.AddSingleton<TodoService>();
             builder.Services.AddTransientWithShellRoute<ToDoListPage,TodoListViewModel>(nameof(ToDoListPage));
             builder.Services.AddTransientWithShellRoute<ToDoDetailPage,TodoDetailViewModel>(nameof(ToDoDetailPage));
+            builder.Services.AddSingleton<INavigationService, MauiNavigationService>();
+            builder.Services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
             #endregion
 
 #if DEBUG
